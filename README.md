@@ -11,7 +11,7 @@
 
 ## 安装到 WorkBuddy
 
-1. 打包：在仓库根目录运行 `bash build.sh`，得到 `dist/yiyuan-duochuang.zip`（打包前会按 WorkBuddy 技能规范校验格式）。也可以直接下载 Releases 里的 ZIP。
+1. 下载技能包：直接下载仓库里的 [`release/yiyuan-duochuang.zip`](release/yiyuan-duochuang.zip)（打开后点 Download raw file）。改过技能文件后，在仓库根目录运行 `bash build.sh` 重新打包，它会先按 WorkBuddy 技能规范校验格式。
 2. 在 WorkBuddy 左侧进入【技能】→【添加技能】，上传这个 ZIP。
 3. 准备运行环境（在运行 WorkBuddy 的电脑上）：
    - Python 3.8 及以上，并安装 Pillow：`python3 -m pip install pillow`
@@ -74,6 +74,7 @@ yiyuan-duochuang/            技能目录（上传 WorkBuddy 的就是它）
 └── scripts/                 setup_check / fetch_fonts / gen_image / overlay_text / lint / pack
 tools/validate_skill.py      WorkBuddy 技能格式校验与打包
 build.sh                     一键校验并打包
+release/yiyuan-duochuang.zip 打包好的技能，直接上传 WorkBuddy
 ```
 
 使用时会在你的工作目录里生成三个文件夹，技能更新时不会被覆盖：
