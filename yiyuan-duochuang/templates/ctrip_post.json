@@ -1,0 +1,69 @@
+{
+  "_limits": {
+    "highlights": {
+      "count": [
+        3,
+        5
+      ],
+      "chars": [
+        4,
+        20
+      ]
+    },
+    "note.title": {
+      "chars": [
+        1,
+        30
+      ]
+    },
+    "note.body": {
+      "chars": [
+        100,
+        1000
+      ]
+    },
+    "images": {
+      "count": [
+        4,
+        9
+      ]
+    },
+    "on_image_text": {
+      "lines": 2,
+      "line_chars": 12
+    }
+  },
+  "platform": "ctrip",
+  "merchant_type": "EBK / VBK / 星球号 / 途家 / 不确定",
+  "note": {
+    "title": "",
+    "body": ""
+  },
+  "highlights": [],
+  "detail_modules": [
+    {
+      "module": "费用包含",
+      "text": "",
+      "image_slot": ""
+    }
+  ],
+  "review_replies": {
+    "good": "",
+    "neutral": "",
+    "bad": ""
+  },
+  "fact_check": [
+    {
+      "item": "价格",
+      "post": "",
+      "backend": "【待补：用户核对后台】",
+      "match": false
+    }
+  ],
+  "images": [],
+  "declarations": {
+    "ai_generated": true,
+    "marketing": true
+  },
+  "needs_human": []
+}

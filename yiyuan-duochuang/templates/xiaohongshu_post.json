@@ -1,0 +1,75 @@
+{
+  "_limits": {
+    "titles": {
+      "count": [
+        3,
+        3
+      ],
+      "chars": [
+        1,
+        20
+      ]
+    },
+    "chosen_title": {
+      "chars": [
+        0,
+        20
+      ]
+    },
+    "cover_text": {
+      "chars": [
+        1,
+        12
+      ]
+    },
+    "body": {
+      "chars": [
+        100,
+        1000
+      ],
+      "warn_chars": [
+        400,
+        800
+      ]
+    },
+    "tags": {
+      "count": [
+        5,
+        8
+      ]
+    },
+    "images": {
+      "count": [
+        6,
+        9
+      ],
+      "hard_max": 18
+    },
+    "on_image_text": {
+      "lines": 3,
+      "line_chars": 12
+    }
+  },
+  "platform": "xiaohongshu",
+  "audience": "",
+  "keywords": {
+    "core": "",
+    "long_tail": []
+  },
+  "titles": [
+    "",
+    "",
+    ""
+  ],
+  "chosen_title": "",
+  "cover_text": "",
+  "body": "",
+  "tags": [],
+  "first_comment": "",
+  "images": [],
+  "declarations": {
+    "ai_generated": true,
+    "marketing": true
+  },
+  "needs_human": []
+}

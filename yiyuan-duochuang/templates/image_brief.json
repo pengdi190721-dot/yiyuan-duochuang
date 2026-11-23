@@ -1,0 +1,38 @@
+{
+  "_说明": "第 ⑤ 步：post.json 的 images 数组里每一项都按这个模板填。ratio 只能从 references/image-generation.md 的尺寸表里选。text_mode 为\"底图叠字\"时必须填 text_layers。",
+  "slot": "封面",
+  "selected": true,
+  "ratio": "3:4",
+  "reference_images": [
+    "素材/乐园01.jpg"
+  ],
+  "keep": "乐园的滑梯和球池布局、窗外的光线方向",
+  "change": "裁切、色调、排版、在上方加文字",
+  "text_mode": "直接画字",
+  "on_image_text": "娃有人看 我能躺平",
+  "text_area": "上方三分之一",
+  "style": "清新实拍风",
+  "desc": "首图钩子：身份代入",
+  "benchmark": "",
+  "text_layers": [
+    {
+      "text": "娃有人看 我能躺平",
+      "box": [
+        6,
+        5,
+        94,
+        18
+      ],
+      "size_ratio": 0.065,
+      "color": "#FFFFFF",
+      "stroke_color": "#1A1A1A",
+      "stroke_ratio": 0.08,
+      "plate_color": "#000000",
+      "plate_alpha": 0.0,
+      "font": "斜体粗标题",
+      "align": "center",
+      "valign": "middle"
+    }
+  ],
+  "ai_generated": true
+}

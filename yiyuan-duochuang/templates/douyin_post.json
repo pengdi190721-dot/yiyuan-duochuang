@@ -1,0 +1,59 @@
+{
+  "_limits": {
+    "cover_text": {
+      "count": [
+        3,
+        3
+      ],
+      "chars": [
+        1,
+        12
+      ]
+    },
+    "chosen_cover_text": {
+      "chars": [
+        0,
+        12
+      ]
+    },
+    "caption": {
+      "chars": [
+        10,
+        150
+      ]
+    },
+    "topics": {
+      "count": [
+        3,
+        5
+      ]
+    },
+    "images": {
+      "count": [
+        4,
+        9
+      ]
+    },
+    "on_image_text": {
+      "lines": 2,
+      "line_chars": 12
+    }
+  },
+  "platform": "douyin",
+  "hook_type": "反差 / 悬念 / 价格 / 身份代入 / 结果前置",
+  "cover_text": [
+    "",
+    "",
+    ""
+  ],
+  "chosen_cover_text": "",
+  "caption": "",
+  "topics": [],
+  "poi": "",
+  "images": [],
+  "declarations": {
+    "ai_generated": true,
+    "marketing": true
+  },
+  "needs_human": []
+}

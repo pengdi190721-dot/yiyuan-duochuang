@@ -1,0 +1,70 @@
+{
+  "_说明": "第 ② 步每张对标图一份，存为 00_对标拆解_<序号>.json。位置用百分比坐标（左上角 0,0，右下角 100,100）；颜色用 #RRGGBB；字高 = 字的高度 ÷ 画面高度；看不清写 unknown。",
+  "source": "workbench/对标库/xxx.jpg",
+  "canvas": {
+    "ratio": "3:4",
+    "width": 1080,
+    "height": 1440
+  },
+  "layout": {
+    "subject_box": [
+      10,
+      30,
+      90,
+      95
+    ],
+    "blank_areas": [
+      [
+        5,
+        3,
+        95,
+        25
+      ]
+    ],
+    "pattern": "上字下图"
+  },
+  "text_blocks": [
+    {
+      "text": "对标图上的原文（只用于比对，不会出现在我们的稿子里）",
+      "role": "主标题",
+      "box": [
+        6,
+        5,
+        94,
+        18
+      ],
+      "height_ratio": 0.065,
+      "weight": "粗",
+      "color": "#FFFFFF",
+      "stroke": {
+        "color": "#1A1A1A",
+        "width_ratio": 0.08
+      },
+      "shadow": "unknown",
+      "plate": {
+        "color": "#000000",
+        "alpha": 0.0
+      },
+      "font_style": "斜体粗标题",
+      "align": "center"
+    }
+  ],
+  "palette": [
+    "#F4E9D8",
+    "#2B5D8A",
+    "#FFFFFF"
+  ],
+  "photo_style": {
+    "tone": "暖",
+    "brightness": "偏亮",
+    "contrast": "中",
+    "filter": "胶片感"
+  },
+  "decorations": [
+    "左上角圆形贴纸"
+  ],
+  "sequence": {
+    "position": 1,
+    "role": "封面"
+  }
+}

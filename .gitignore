@@ -1,0 +1,8 @@
+dist/
+__pycache__/
+*.pyc
+.DS_Store
+# 用户数据与输出不进仓库
+yiyuan-data/
+workbench/
+输出/

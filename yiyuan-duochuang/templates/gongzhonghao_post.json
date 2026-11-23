@@ -1,0 +1,59 @@
+{
+  "_limits": {
+    "titles": {
+      "count": [
+        3,
+        3
+      ],
+      "chars": [
+        15,
+        25
+      ]
+    },
+    "chosen_title": {
+      "chars": [
+        0,
+        25
+      ]
+    },
+    "digest": {
+      "chars": [
+        10,
+        50
+      ]
+    },
+    "body": {
+      "chars": [
+        1500,
+        3000
+      ]
+    },
+    "images": {
+      "count": [
+        3,
+        15
+      ]
+    },
+    "on_image_text": {
+      "lines": 2,
+      "line_chars": 16
+    }
+  },
+  "platform": "gongzhonghao",
+  "template": "攻略型 / 故事型 / 清单型",
+  "titles": [
+    "",
+    "",
+    ""
+  ],
+  "chosen_title": "",
+  "digest": "",
+  "body": "",
+  "cta": "",
+  "images": [],
+  "declarations": {
+    "ai_generated": true,
+    "marketing": true
+  },
+  "needs_human": []
+}

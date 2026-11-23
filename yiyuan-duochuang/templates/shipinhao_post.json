@@ -1,0 +1,59 @@
+{
+  "_limits": {
+    "cover_text": {
+      "count": [
+        2,
+        2
+      ],
+      "chars": [
+        1,
+        14
+      ]
+    },
+    "chosen_cover_text": {
+      "chars": [
+        0,
+        14
+      ]
+    },
+    "caption": {
+      "chars": [
+        10,
+        120
+      ]
+    },
+    "topics": {
+      "count": [
+        2,
+        4
+      ]
+    },
+    "images": {
+      "count": [
+        4,
+        9
+      ],
+      "hard_max": 18
+    },
+    "on_image_text": {
+      "lines": 2,
+      "line_chars": 14
+    }
+  },
+  "platform": "shipinhao",
+  "cover_text": [
+    "",
+    ""
+  ],
+  "chosen_cover_text": "",
+  "share_reason": "实用清单 / 避坑提醒 / 亲情场景",
+  "caption": "",
+  "topics": [],
+  "follow_up": "企业微信 / 直播预约 / 公众号文章",
+  "images": [],
+  "declarations": {
+    "ai_generated": true,
+    "marketing": true
+  },
+  "needs_human": []
+}
