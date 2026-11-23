@@ -87,6 +87,10 @@ release/yiyuan-duochuang.zip 打包好的技能，直接上传 WorkBuddy
 
 各平台规则依据官方页面（小红书社区公约 2.0 与蒲公英内容审核规范、抖音生活服务素材发布要求、微信视频号与公众平台运营规范、携程内容中心与商家规则）和《广告法》《互联网广告管理办法》《人工智能生成合成内容标识办法》。规则会变，技能首次运行和之后每 30 天会提醒你重新检索；新规则写进 `yiyuan-data/rules-latest/`，与原规则冲突时由你决定。
 
+## 许可证
+
+本项目以 [MIT 许可证](LICENSE) 发布：可以免费使用、修改、分发和商用，需保留版权声明和许可证原文；按原样提供，不承担任何担保责任。技能包内也附了一份 `LICENSE`。
+
 ## 第三方内容
 
-见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+`references/humanizer-zh.md` 收录的 Humanizer-zh 全文保留其原作者的 MIT 许可证，字体由使用者自行下载（SIL OFL 1.1）。详见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
