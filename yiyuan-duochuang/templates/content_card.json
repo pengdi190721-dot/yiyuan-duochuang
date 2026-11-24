@@ -1,5 +1,5 @@
 {
-  "_说明": "第 ① 步按此模板填写，存为 输出/<日期>_<主题>/00_内容卡.json。下面的值是示例数据，填写时全部替换成用户素材里的内容。素材里没有的写\"【待补：xx】\"，禁止自己补。",
+  "_说明": "第 ① 步按此模板填写，存为 输出/<日期>_<主题>/00_内容卡.json。下面的值是示例数据，填写时全部替换。事实只能来自本次素材包或 yiyuan-data/公司资料.md，来源写进 fact_sources；都没有的写\"【待补：xx】\"，禁止自己补。",
   "topic": "XX 亲子度假酒店 · 暑期亲子套餐",
   "audience": "带 3–6 岁孩子的家庭",
   "goal": "种草",
@@ -41,6 +41,14 @@
     "opening_hours": "儿童乐园 9:00–17:00",
     "booking": "携程搜索酒店名，或酒店官方小程序"
   },
+  "fact_sources": {
+    "price": "本次素材包",
+    "valid_dates": "本次素材包",
+    "includes": "本次素材包",
+    "address": "",
+    "opening_hours": "公司资料.md",
+    "booking": "公司资料.md"
+  },
   "story_points": [
     "大人可以在孩子玩的时候休息"
   ],
@@ -52,5 +60,8 @@
   ],
   "user_quotes": [],
   "topic_insights": [],
+  "advice_ref": "workbench/数据/发布建议.json 里本次采用的选题（没有就留空）",
+  "case_refs": [],
+  "style_refs": [],
   "benchmarks": []
 }

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""第 ⑨ 步：生成各平台发布文案和 07_交付清单.md。
+"""第 ⑨ 步：生成 发布总览.html（主交付物）、各平台发布文案和 07_交付清单.md。
 
 用法：
   python3 pack.py --run "输出/2026-11-23_主题"
@@ -14,7 +14,8 @@ import re
 import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
-from _common import FONT_WHITELIST, PLATFORMS, existing_platforms, load_json, now, platform_dir, post_path, selected_images  # noqa: E402
+from _common import FONT_WHITELIST, PLATFORMS, data_dir, existing_platforms, load_json, now, platform_dir, post_path, selected_images  # noqa: E402
+from render_publish import build as build_publish_html  # noqa: E402
 
 DECLARATIONS = {
     "douyin": "自主声明勾选\"内容由 AI 生成\"；推广内容加选\"营销推广信息\"",
@@ -79,6 +80,7 @@ def collect_placeholders(run: pathlib.Path) -> list[str]:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--run", required=True)
+    ap.add_argument("--data-dir", help="用户数据目录，默认 ./yiyuan-data")
     args = ap.parse_args()
     run = pathlib.Path(args.run)
     codes = existing_platforms(run)
@@ -129,8 +131,10 @@ def main() -> int:
     record = run / "交互记录.md"
     if not record.exists():
         record.write_text("# 交互记录\n\n", encoding="utf-8")
+    overview = build_publish_html(run, data_dir(args.data_dir))
     print(json.dumps({"platforms": codes, "needs_human": len(needs_human), "missing_images": missing_imgs,
-                      "below_target": below, "checklist": str(run / "07_交付清单.md")}, ensure_ascii=False, indent=2))
+                      "below_target": below, "checklist": str(run / "07_交付清单.md"),
+                      "publish_overview": str(overview)}, ensure_ascii=False, indent=2))
     return 0
 
 

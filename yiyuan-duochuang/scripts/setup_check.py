@@ -21,7 +21,7 @@ import subprocess
 import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
-from _common import FONT_WHITELIST, TEMPLATES, data_dir, load_json, now, save_json, today  # noqa: E402
+from _common import FONT_WHITELIST, PLATFORMS, TEMPLATES, data_dir, load_json, now, save_json, today  # noqa: E402
 
 REFRESH_DAYS = 30
 
@@ -59,8 +59,14 @@ def status(ddir: pathlib.Path) -> dict:
         except ValueError:
             due = True
     rules_latest = sorted(p.stem for p in (ddir / "rules-latest").glob("*.md")) if (ddir / "rules-latest").is_dir() else []
-    voice = sorted(p.stem for p in (pathlib.Path.cwd() / "workbench" / "账号调性").glob("*.md")) \
-        if (pathlib.Path.cwd() / "workbench" / "账号调性").is_dir() else []
+    wb = pathlib.Path.cwd() / "workbench"
+    voice = sorted(p.stem for p in (wb / "账号调性").glob("*.md")) if (wb / "账号调性").is_dir() else []
+    meta = load_json(wb / "数据" / "meta.json") if (wb / "数据" / "meta.json").exists() else {}
+    collected = meta.get("collected_at")
+    img_ext = {".jpg", ".jpeg", ".png", ".webp"}
+    style_imgs = [p for p in (wb / "风格库" / "图片").rglob("*") if p.suffix.lower() in img_ext] if (wb / "风格库" / "图片").is_dir() else []
+    style_copy = list((wb / "风格库" / "文案").rglob("*.md")) if (wb / "风格库" / "文案").is_dir() else []
+    cases = (wb / "优秀案例.md").read_text(encoding="utf-8").count("\n### ") if (wb / "优秀案例.md").exists() else 0
 
     result = {
         "data_dir": str(ddir),
@@ -77,6 +83,13 @@ def status(ddir: pathlib.Path) -> dict:
         "rules_refresh_due": due,
         "rules_latest_files": rules_latest,
         "voice_profiles": voice,
+        "session_type": "再次使用" if setup.get("initialized") else "首次使用",
+        "company_profile": (ddir / "公司资料.md").exists(),
+        "data_collected_at": collected,
+        "data_is_today": collected == today(),
+        "dashboard": str(wb / "内容数据中台.html") if (wb / "内容数据中台.html").exists() else None,
+        "style_library": {"对标图": len(style_imgs), "喜欢的文案": len(style_copy)},
+        "case_entries": cases,
     }
     todo = []
     if not pillow:
@@ -88,7 +101,9 @@ def status(ddir: pathlib.Path) -> dict:
     if not result["image_api_key_set"]:
         todo.append("由用户设置环境变量 IMAGE_API_KEY（第 2 步）")
     if not brand_filled:
-        todo.append("按 brand_onboarding.md 引导用户填品牌信息（第 3 步）")
+        todo.append("请用户发公司简介，按 brand_onboarding.md 生成品牌信息和公司资料（第 3 步）")
+    if setup.get("initialized") and collected != today():
+        todo.append(f"第 0 步：数据复盘与本次发布建议（数据停在 {collected or '从未采集'}，先问用户要不要更新）")
     if due:
         todo.append("搜索最新平台规则（第 5 步）")
     if len(fonts) < len(FONT_WHITELIST):
@@ -108,7 +123,9 @@ def init_data(ddir: pathlib.Path) -> None:
     if not setup_path.exists():
         save_json(setup_path, {"created": today()})
     wb = pathlib.Path.cwd() / "workbench"
-    for sub in ("账号调性", "对标库", "手动导入"):
+    subs = ["账号调性", "对标库", "手动导入", "raw", "数据"]
+    subs += [f"风格库/图片/{c}" for c in (*PLATFORMS, "通用")] + [f"风格库/文案/{c}" for c in (*PLATFORMS, "通用")]
+    for sub in subs:
         (wb / sub).mkdir(parents=True, exist_ok=True)
     (pathlib.Path.cwd() / "输出").mkdir(exist_ok=True)
     print(f"已准备好：{ddir}、{wb}、{pathlib.Path.cwd() / '输出'}")

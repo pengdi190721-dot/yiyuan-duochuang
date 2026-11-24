@@ -19,7 +19,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from _common import (  # noqa: E402
     PLATFORMS, REFERENCES, TARGET_PX, TEMPLATES, TEXT_MODES, char_count, check_platform,
     data_dir, existing_platforms, get_path, iter_publishable, load_json, now, platform_dir,
-    post_path, ratio_value, resolve_file, safe_name, save_json, selected_images,
+    post_path, ratio_value, resolve_file, safe_name, save_json, selected_images, workbench_dir,
 )
 
 NUM_PATTERNS = [
@@ -212,25 +212,49 @@ def longest_common(a: str, b: str) -> str:
     return a[m.a:m.a + m.size]
 
 
-def check_benchmark_copy(post: dict, run: pathlib.Path, rep: Report, min_len: int = 8) -> None:
-    bench_texts: list[str] = []
-    for path in sorted(run.glob("00_对标拆解*.json")):
+def _breakdown_texts(paths) -> list[str]:
+    out: list[str] = []
+    for path in paths:
         try:
             data = load_json(path)
         except Exception:
             continue
-        for block in data.get("text_blocks") or []:
+        for block in (data.get("text_blocks") or []) if isinstance(data, dict) else []:
             text = (block or {}).get("text") or ""
             if text and text != "unknown":
-                bench_texts.append(re.sub(r"\s", "", text))
-    if not bench_texts:
+                out.append(re.sub(r"\s", "", text))
+    return out
+
+
+def _sample_texts(paths) -> list[str]:
+    """风格库里用户喜欢的文案：取"## 原文"一节。"""
+    out: list[str] = []
+    for path in paths:
+        text = path.read_text(encoding="utf-8")
+        m = re.search(r"^## 原文\s*\n(.*?)(?=^## |\Z)", text, re.S | re.M)
+        body = re.sub(r"\s", "", m.group(1) if m else "")
+        if body:
+            out.append(body)
+    return out
+
+
+def check_benchmark_copy(code: str, post: dict, run: pathlib.Path, wb: pathlib.Path, rep: Report) -> None:
+    """对标图原文（别人的内容）连续 8 字相同为 FAIL；用户喜欢的文案样本连续 12 字相同为 WARN。"""
+    lib = wb / "风格库"
+    bench = _breakdown_texts(sorted(run.glob("00_对标拆解*.json")) + sorted((lib / "图片").glob("**/*.json")))
+    samples = _sample_texts(sorted((lib / "文案" / code).glob("*.md")) + sorted((lib / "文案" / "通用").glob("*.md")))
+    if not bench and not samples:
         return
     for field, text in iter_publishable(post):
         flat = re.sub(r"\s", "", text)
-        for bt in bench_texts:
+        for bt in bench:
             common = longest_common(flat, bt)
-            if len(common) >= min_len:
+            if len(common) >= 8:
                 rep.add("FAIL", f"{field}：与对标图原文连续 {len(common)} 字相同「{common}」，属于照抄")
+        for st in samples:
+            common = longest_common(flat, st)
+            if len(common) >= 12:
+                rep.add("WARN", f"{field}：与风格库文案样本连续 {len(common)} 字相同「{common[:20]}…」，只学写法，换成这次的内容")
 
 
 # ---------- 图片文件 ----------
@@ -323,10 +347,13 @@ def check_cross(codes: list[str], posts: dict[str, dict], reports: dict[str, Rep
             fa, fb = first_sentence(main_text(pa)), first_sentence(main_text(pb))
             if fa and fa == fb:
                 reports[a].add("FAIL", f"正文第一句「{fa}」和{name_b}一样")
-            ratio = copy_ratio(main_text(pa), main_text(pb))
-            if ratio > threshold:
+            ta, tb = main_text(pa), main_text(pb)
+            ratio = copy_ratio(ta, tb)
+            shorter = min(len(re.sub(r"\s", "", ta)), len(re.sub(r"\s", "", tb)))
+            limit = threshold if shorter >= 100 else max(threshold, 0.8)  # 短文案共用一两句事实描述很正常
+            if ratio > limit:
                 reports[a].add("FAIL", f"正文和{name_b}重复 {ratio:.0%}（按较短一篇里连续 6 字以上相同的部分计），"
-                                       f"超过 {threshold:.0%}，属于一文多发")
+                                       f"超过 {limit:.0%}，属于一文多发")
 
 
 # ---------- 报告 ----------
@@ -356,6 +383,7 @@ def main() -> int:
     ap.add_argument("--run", required=True, help="输出目录，例如 输出/2026-11-23_主题")
     ap.add_argument("--platform", help="只检查这个平台（平台代号）")
     ap.add_argument("--data-dir", help="用户数据目录，默认 ./yiyuan-data")
+    ap.add_argument("--workbench", help="工作台目录，默认 ./workbench")
     ap.add_argument("--dup-threshold", type=float, default=0.5, help="平台间正文相似度上限，默认 0.5")
     ap.add_argument("--json", action="store_true", help="同时把结果以 JSON 打印出来")
     args = ap.parse_args()
@@ -373,6 +401,7 @@ def main() -> int:
     card_path = run / "00_内容卡.json"
     card = load_json(card_path) if card_path.exists() else None
     brand = data_dir(args.data_dir) / "brand.md"
+    wb = workbench_dir(args.workbench)
     groups = load_banned(brand)
     posts = {code: load_json(post_path(run, code)) for code in present}
     reports = {code: Report() for code in codes}
@@ -384,7 +413,7 @@ def main() -> int:
         check_facts(post, card, rep)
         check_image_fields(post, run, rep)
         check_declarations(code, post, rep)
-        check_benchmark_copy(post, run, rep)
+        check_benchmark_copy(code, post, run, wb, rep)
         check_image_files(code, post, run, rep)
         for item in post.get("needs_human") or []:
             rep.add("INFO", f"needs_human：{item}")

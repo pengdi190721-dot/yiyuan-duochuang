@@ -108,6 +108,26 @@ def data_dir(arg: str | None) -> pathlib.Path:
     return pathlib.Path(arg) if arg else pathlib.Path.cwd() / "yiyuan-data"
 
 
+def workbench_dir(arg: str | None) -> pathlib.Path:
+    return pathlib.Path(arg) if arg else pathlib.Path.cwd() / "workbench"
+
+
+def brand_section(ddir: pathlib.Path, heading: str) -> str:
+    """读 yiyuan-data/brand.md 里某一节的文字（去掉注释和"【待填】"）。"""
+    path = ddir / "brand.md"
+    if not path.is_file():
+        return ""
+    m = re.search(rf"^## {re.escape(heading)}\s*\n(.*?)(?=^## |\Z)", path.read_text(encoding="utf-8"), re.S | re.M)
+    if not m:
+        return ""
+    text = re.sub(r"<!--.*?-->", "", m.group(1), flags=re.S).strip()
+    return "" if text.startswith("【待填") else text
+
+
+def brand_name(ddir: pathlib.Path) -> str:
+    return brand_section(ddir, "品牌名").splitlines()[0].strip() if brand_section(ddir, "品牌名") else ""
+
+
 def platform_dir(run: pathlib.Path, code: str) -> pathlib.Path:
     return run / PLATFORMS[code]["dir"]
 
