@@ -15,6 +15,7 @@
   - SKILL.md 正文 ≤ 5000 词（中文按字计）
   - 正文里 @references/… 和 @templates/… 指向的文件都存在
   - ZIP 根目录为技能目录，不含符号链接、越界路径和缓存文件
+  - 只含纯文本文件（.md .py .js .txt .json .yaml .yml），不超过 300 个文件、10 MB
 """
 from __future__ import annotations
 
@@ -33,6 +34,9 @@ SEMVER = re.compile(
     r"(?:-((?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*)(?:\.(?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*))*))?"
     r"(?:\+([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?$")
 EXCLUDE_PARTS = {"__pycache__", ".DS_Store"}
+# WorkBuddy / CodeBuddy 技能包只接受纯文本文件，没有扩展名的文件（如 LICENSE）也会被拒绝
+ALLOWED_EXT = {".md", ".py", ".js", ".txt", ".json", ".yaml", ".yml"}
+MAX_FILES, MAX_BYTES = 300, 10 * 1024 * 1024
 
 
 def parse_frontmatter(text: str, path: pathlib.Path) -> tuple[dict, str]:
@@ -97,9 +101,18 @@ def validate(skill: pathlib.Path) -> None:
     for ref in sorted(set(re.findall(r"@((?:references|templates|scripts)/[\w./-]+)", body))):
         if not (skill / ref).exists():
             sys.exit(f"{path}: 引用的文件不存在 {ref}")
+    files = [p for p in skill.rglob("*") if p.is_file() and not (EXCLUDE_PARTS & set(p.parts)) and p.suffix != ".pyc"]
     for p in skill.rglob("*"):
         if p.is_symlink():
             sys.exit(f"{p}: 技能目录里不能有符号链接")
+    bad = sorted(str(p.relative_to(skill)) for p in files if p.suffix.lower() not in ALLOWED_EXT)
+    if bad:
+        sys.exit(f"不允许的文件类型（只接受 {' '.join(sorted(ALLOWED_EXT))}）：{', '.join(bad)}")
+    if len(files) > MAX_FILES:
+        sys.exit(f"文件数 {len(files)} 超过 {MAX_FILES}")
+    total = sum(p.stat().st_size for p in files)
+    if total > MAX_BYTES:
+        sys.exit(f"总大小 {total // 1024} KB 超过 10 MB")
     print(f"frontmatter ok · 正文约 {words} 词 · 引用文件齐全 · {skill.name}")
 
 
